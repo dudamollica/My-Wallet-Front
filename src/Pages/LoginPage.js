@@ -1,16 +1,55 @@
 import Logo from "../Assets/MyWallet.png";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, FormStyle, LinkStyle} from "../Constants/StyledsComponents";
+import {
+  Container,
+  FormStyle,
+  LinkStyle,
+} from "../Constants/StyledsComponents";
+import { useState, useContext } from "react";
+import axios from "axios";
+import { AuthContext } from "../AppContext/auth";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { saveToken } = useContext(AuthContext);
+
+  function login(e) {
+    e.preventDefault();
+    const url = "http://localhost:5000/";
+    const body = { email, password };
+    const promisse = axios.post(url, body);
+    promisse.then((res) => {
+      saveToken(res.data);
+      navigate("/home");
+    });
+    promisse.catch((err) => {
+      alert("Email ou senha inválidos");
+      console.log(err);
+    });
+  }
+
   return (
     <Container>
       <LogoStyle src={Logo} />
 
-      <FormStyle>
-        <input type="email" placeholder="E-mail"></input>
-        <input type="password" placeholder="Senha"></input>
+      <FormStyle onSubmit={login}>
+        <input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          required
+          onChange={(e) => setEmail(e.target.value)}
+        ></input>
+        <input
+          type="password"
+          placeholder="Senha"
+          value={password}
+          required
+          onChange={(e) => setPassword(e.target.value)}
+        ></input>
         <button type="submit">Entrar</button>
       </FormStyle>
       <LinkStyle>

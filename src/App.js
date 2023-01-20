@@ -5,9 +5,11 @@ import HomePage from "./Pages/HomePage";
 import EntriesPage from "./Pages/EntriesPage";
 import ExitsPage from "./Pages/ExitsPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AuthProvider from "./AppContext/auth.js";
 
 function App() {
   return (
+    <AuthProvider>
     <BrowserRouter>
     <GlobalStyle/>
       <Routes>
@@ -18,6 +20,7 @@ function App() {
         <Route path="/nova-saida" element={<ExitsPage/>} />
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   );
 }
 

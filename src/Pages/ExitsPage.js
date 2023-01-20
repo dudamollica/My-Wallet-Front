@@ -1,6 +1,9 @@
 import { FormStyle, Title } from "../Constants/StyledsComponents";
+import { AuthContext } from "../AppContext/auth";
+import { useContext } from "react";
 
 export default function ExitsPage() {
+  const { token } = useContext(AuthContext);
   return (
     <>
       <Title>Nova Saída</Title>

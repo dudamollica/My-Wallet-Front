@@ -1,9 +1,28 @@
 import { Title } from "../Constants/StyledsComponents";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../AppContext/auth";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
+  const [registers, setRegisters] = useState("")
+
+  useEffect(() => {
+    const URL =
+      "http://localhost:5000/home";
+    const config = {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    };
+    const promise = axios.get(URL, config);
+    promise.then((res) => {
+      setRegisters(res.data);
+    });
+    promise.catch((err) => console.log(err.data));
+  }, []);
 
   function goEntries() {
     navigate("/nova-entrada");

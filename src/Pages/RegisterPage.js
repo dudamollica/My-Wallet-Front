@@ -13,15 +13,15 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passConfirm, setPassConfirm] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   function submitRegister(e) {
     e.preventDefault();
     const url = "http://localhost:5000/cadastro";
-    const body = { name, email, password };
+    const body = { name, email, password, confirmPassword};
 
-    if (password === passConfirm) {
+    if (password === confirmPassword) {
       const promisse = axios.post(url, body);
       promisse.then(() => navigate("/"));
       promisse.catch((err) => console.log(err));
@@ -60,8 +60,8 @@ export default function RegisterPage() {
           type="password"
           placeholder="Confirme a senha"
           required
-          value={passConfirm}
-          onChange={(e) => setPassConfirm(e.target.value)}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         ></input>
         <button type="submit">Cadastrar</button>
       </FormStyle>
