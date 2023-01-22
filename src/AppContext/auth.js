@@ -4,9 +4,14 @@ export const AuthContext = createContext({});
 
 export default function AuthProvider({ children }) {
   const [token, setToken] = useState("");
+  const [userName, setUserName] = useState("");
 
   function saveToken(token) {
     setToken(token);
+  }
+
+  function saveName(name){
+    setUserName(name)
   }
 
   return (
@@ -14,6 +19,8 @@ export default function AuthProvider({ children }) {
       value={{
         token,
         saveToken,
+        saveName,
+        userName,
       }}
     >
       {children}

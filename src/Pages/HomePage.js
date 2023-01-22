@@ -3,15 +3,15 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../AppContext/auth";
+import axios from "axios";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext);
-  const [registers, setRegisters] = useState("")
+  const { token, userName } = useContext(AuthContext);
+  const [registers, setRegisters] = useState([]);
 
   useEffect(() => {
-    const URL =
-      "http://localhost:5000/home";
+    const URL = "http://localhost:5000/home";
     const config = {
       headers: {
         authorization: `Bearer ${token}`,
@@ -34,13 +34,30 @@ export default function HomePage() {
   return (
     <>
       <ContainerTop>
-        <Title>Olá, Fulano </Title>
-        <Title>
+        <Title>Olá, {userName} </Title>
+        <Title
+          onClick={() => {
+            navigate("/");
+            window.location.reload();
+          }}
+        >
           <ion-icon name="exit-outline"></ion-icon>{" "}
         </Title>
       </ContainerTop>
 
-      <DataStyle>Não há registros de entrada ou saída</DataStyle>
+      <DataStyle register={registers.length}>
+        {registers.length == 0
+          ? "Não há registros de entrada ou saída"
+          : registers.map((r) => {
+              return (
+                <div key={r._id}>
+                  <Date>{r.date}</Date>
+                  <Description>{r.description}</Description>
+                  <Amount type={r.type}>{r.amount}</Amount>
+                </div>
+              );
+            })}
+      </DataStyle>
 
       <ContainerBottom>
         <div onClick={goEntries}>
@@ -70,9 +87,27 @@ const DataStyle = styled.div`
   line-height: 23px;
   text-align: center;
   color: #868686;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 5px;
+  overflow: scroll;
+  display: ${(props) => props.register == 0 && "flex"};
+  align-items: ${(props) => props.register == 0 && "center"};
+  justify-content: ${(props) => props.register == 0 && "center"};
+  padding-top: ${(props) => props.register != 0 && "10px;"};
+  div {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 10px;
+  }
+`;
+
+const Date = styled.span`
+  color: #c6c6c6;
+`;
+const Description = styled.span`
+  color: #000000;
+`;
+const Amount = styled.span`
+  color: ${(props) => (props.type == "input" ? "#03AC00" : "#C70000")};
 `;
 
 const ContainerBottom = styled.div`

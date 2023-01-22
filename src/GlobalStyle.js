@@ -54,6 +54,9 @@ body{
 button:hover{
     cursor: pointer;
 }
+span, div, form, input, button, a{
+    font-family: 'Raleway', sans-serif;
+}
 `;
 
 export default GlobalStyle;

@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { saveToken } = useContext(AuthContext);
+  const { saveToken, saveName } = useContext(AuthContext);
 
   function login(e) {
     e.preventDefault();
@@ -22,7 +22,8 @@ export default function LoginPage() {
     const body = { email, password };
     const promisse = axios.post(url, body);
     promisse.then((res) => {
-      saveToken(res.data);
+      saveToken(res.data.token);
+      saveName(res.data.userName)
       navigate("/home");
     });
     promisse.catch((err) => {
@@ -52,6 +53,7 @@ export default function LoginPage() {
         ></input>
         <button type="submit">Entrar</button>
       </FormStyle>
+
       <LinkStyle>
         <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>
       </LinkStyle>
