@@ -31,7 +31,8 @@ export default function ExitsPage() {
       <Title>Nova Saída</Title>
       <FormStyle onSubmit={submitExit}>
         <input
-          placeholder="Valor"
+          placeholder="Valor R$"
+          type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           required

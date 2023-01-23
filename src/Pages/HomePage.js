@@ -7,8 +7,10 @@ import axios from "axios";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { token, userName } = useContext(AuthContext);
+  const { token, userName, saveName, saveToken } = useContext(AuthContext);
   const [registers, setRegisters] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const [isNegative, setIsNegative] = useState("");
 
   useEffect(() => {
     const URL = "http://localhost:5000/home";
@@ -20,6 +22,7 @@ export default function HomePage() {
     const promise = axios.get(URL, config);
     promise.then((res) => {
       setRegisters(res.data);
+      balanceSum(res.data);
     });
     promise.catch((err) => console.log(err.data));
   }, []);
@@ -30,6 +33,15 @@ export default function HomePage() {
   function goExits() {
     navigate("/nova-saida");
   }
+  function balanceSum(register) {
+    const allAmounts = register.map((r) => Number(r.amount));
+    let total = 0;
+    for (let i = 0; i < allAmounts.length; i++) {
+      total += allAmounts[i];
+    }
+    setBalance(total.toFixed(2));
+    setIsNegative(total.toString().split("")[0]);
+  }
 
   return (
     <>
@@ -38,7 +50,8 @@ export default function HomePage() {
         <Title
           onClick={() => {
             navigate("/");
-            window.location.reload();
+            saveName("");
+            saveToken("");
           }}
         >
           <ion-icon name="exit-outline"></ion-icon>{" "}
@@ -57,6 +70,11 @@ export default function HomePage() {
                 </div>
               );
             })}
+        {registers.length > 0 && (
+          <Balance balance={isNegative}>
+            <p>Saldo</p> <span>{balance}</span>
+          </Balance>
+        )}
       </DataStyle>
 
       <ContainerBottom>
@@ -80,7 +98,7 @@ const ContainerTop = styled.div`
 `;
 
 const DataStyle = styled.div`
-  height: 446px;
+  height: 401px;
   background-color: white;
   font-weight: 400;
   font-size: 20px;
@@ -89,6 +107,8 @@ const DataStyle = styled.div`
   color: #868686;
   border-radius: 5px;
   overflow: scroll;
+  box-sizing: border-box;
+  padding-bottom: 45px;
   display: ${(props) => props.register == 0 && "flex"};
   align-items: ${(props) => props.register == 0 && "center"};
   justify-content: ${(props) => props.register == 0 && "center"};
@@ -97,6 +117,10 @@ const DataStyle = styled.div`
     display: flex;
     justify-content: space-between;
     padding: 10px 10px;
+  }
+  @media (max-width: 553px) {
+    margin-top: 15px;
+    margin-bottom:30px;
   }
 `;
 
@@ -108,6 +132,21 @@ const Description = styled.span`
 `;
 const Amount = styled.span`
   color: ${(props) => (props.type == "input" ? "#03AC00" : "#C70000")};
+`;
+
+const Balance = styled.div`
+  position: fixed;
+  width: 81%;
+  background: white;
+  z-index: 1;
+  top: 440px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 17px;
+  color: #000000;
+  span {
+    color: ${(props) => (props.balance == "-" ? "#C70000" : "#03AC00")};
+  }
 `;
 
 const ContainerBottom = styled.div`

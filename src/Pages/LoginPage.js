@@ -6,7 +6,7 @@ import {
   FormStyle,
   LinkStyle,
 } from "../Constants/StyledsComponents";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect} from "react";
 import axios from "axios";
 import { AuthContext } from "../AppContext/auth";
 
@@ -23,7 +23,7 @@ export default function LoginPage() {
     const promisse = axios.post(url, body);
     promisse.then((res) => {
       saveToken(res.data.token);
-      saveName(res.data.userName)
+      saveName(res.data.userName);
       navigate("/home");
     });
     promisse.catch((err) => {

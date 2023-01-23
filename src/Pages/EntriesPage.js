@@ -32,7 +32,8 @@ export default function EntriesPage() {
       <Title>Nova Entrada</Title>
       <FormStyle onSubmit={submitEntrie}>
         <input
-          placeholder="Valor"
+          placeholder="Valor R$"
+          type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           required
