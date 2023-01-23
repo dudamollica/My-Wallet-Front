@@ -139,7 +139,7 @@ const Balance = styled.div`
   width: 81%;
   background: white;
   z-index: 1;
-  top: 440px;
+  top: 465px;
   border-radius: 5px;
   font-weight: 700;
   font-size: 17px;
